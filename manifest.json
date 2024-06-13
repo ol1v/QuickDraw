@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "quickdraw",
+    "version": "0.1",
+    "permissions": [
+      "clipboardRead",
+      "clipboardWrite",
+      "tabs"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
