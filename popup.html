@@ -1,10 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>quickdraw</title>
+  <title>Quickdraw</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    h1 {
+      font-size: 18px;
+    }
+    label, input, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      width: calc(100% - 22px);
+      padding: 5px;
+    }
+    button {
+      padding: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>quickdraw</h1>
+  <h1>Quickdraw</h1>
   <p>Select a word on the page to extract it.</p>
+  
+  <h2>Add New Site</h2>
+  <label for="siteName">Site Name:</label>
+  <input type="text" id="siteName" placeholder="Example: VirusTotal">
+  
+  <label for="siteUrl">Site URL:</label>
+  <input type="text" id="siteUrl" placeholder="Example: https://www.virustotal.com/gui/ip-address/<ip-to-lookup>">
+  
+  <button id="addSiteButton">Add Site</button>
+
+  <h2>Configured Sites</h2>
+  <ul id="sitesList"></ul>
+
+  <script src="popup.js"></script>
 </body>
 </html>
