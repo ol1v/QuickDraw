@@ -1,25 +1,36 @@
 document.addEventListener('keydown', function(event) {
-    // Check if the pressed key is "1"
-    if (event.key === '1') {
-        // Read text from the clipboard
-        navigator.clipboard.readText()
-            .then(text => {
-                if (text.trim() !== '') {
-                    console.log('Text read from clipboard:', text);
-                    // Signal the background script to open a new tab with the clipboard text
-                    chrome.runtime.sendMessage({ action: "openNewTab", text: text.trim() }, function(response) {
-                        if (response && response.status === 'success') {
-                            console.log('New tab opened successfully. Tab ID:', response.tabId);
-                        } else {
-                            console.error('Failed to open new tab:', response ? response.message : 'Unknown error');
-                        }
-                    });
-                } else {
-                    console.log('Clipboard is empty or does not contain text.');
-                }
-            })
-            .catch(err => {
-                console.error('Failed to read text from clipboard:', err);
-            });
+    if (event.ctrlKey && event.key === '2') {
+      const selection = window.getSelection();
+      const selectedText = selection.toString().trim();
+  
+      if (selectedText) {
+        navigator.clipboard.writeText(selectedText).then(function() {
+          console.log('Text copied to clipboard:', selectedText);
+        }).catch(function(err) {
+          console.error('Failed to copy text to clipboard:', err);
+        });
+      } else {
+        console.log('No text selected.');
+      }
     }
-});
+  
+    if (event.key === '1') {
+      navigator.clipboard.readText().then(function(text) {
+        const selectedText = text.trim();
+        if (selectedText) {
+          chrome.storage.sync.get('sites', function(data) {
+            const sites = data.sites || [];
+            sites.forEach(site => {
+              const newTabUrl = site.url.replace('<ip-to-lookup>', encodeURIComponent(selectedText));
+              chrome.runtime.sendMessage({ action: "createNewTab", text: newTabUrl });
+            });
+          });
+        } else {
+          console.log('Clipboard is empty.');
+        }
+      }).catch(function(err) {
+        console.error('Failed to read from clipboard:', err);
+      });
+    }
+  });
+  

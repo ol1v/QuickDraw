@@ -1,15 +1,6 @@
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === "createNewTab") {
-        const newTabUrl = "https://www.abuseipdb.com/check/" + encodeURIComponent(message.text);
-        console.log('Opening new tab with URL:', newTabUrl);
-
-        chrome.tabs.create({ url: newTabUrl }, function(tab) {
-            console.log('New tab created:', tab);
-            sendResponse({ status: 'success', tabId: tab.id });
-        });
-        return true; // Required for async sendResponse
-    } else if (message.action === "openNewTab") {
-        const newTabUrl = "https://www.abuseipdb.com/check/" + encodeURIComponent(message.text);
+        const newTabUrl = message.text;
         console.log('Opening new tab with URL:', newTabUrl);
 
         chrome.tabs.create({ url: newTabUrl }, function(tab) {
