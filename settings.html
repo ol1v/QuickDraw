@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>QuickDraw Settings</title>
+  <title>Quickdraw Settings</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 10px;
     }
-    h1 {
-      font-size: 24px;
+    h1, h2 {
+      font-size: 18px;
     }
     label, input, button {
       display: block;
@@ -22,23 +22,14 @@
       padding: 5px;
       cursor: pointer;
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 5px;
+    .hotkey-config {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>QuickDraw Settings</h1>
+  <h1>Quickdraw Settings</h1>
   
-  <h2>Configure Hotkey</h2>
-  <label for="hotkeyInput">Press the desired hotkey combination:</label>
-  <input type="text" id="hotkeyInput" readonly placeholder="Press the desired hotkey combination">
-  <button id="saveButton">Save Hotkey</button>
-
   <h2>Add New Site</h2>
   <label for="siteName">Site Name:</label>
   <input type="text" id="siteName" placeholder="Example: VirusTotal">
@@ -50,6 +41,11 @@
 
   <h2>Configured Sites</h2>
   <ul id="sitesList"></ul>
+
+  <h2>Configure Hotkeys</h2>
+  <div id="hotkeyConfigs"></div>
+
+  <button id="addHotkeyConfigButton">Add Hotkey Configuration</button>
 
   <script src="settings.js"></script>
 </body>

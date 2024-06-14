@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const sitesList = document.getElementById('sitesList');
-  
+  // load configured sites from chrome storage to display in popup
     function loadSites() {
       chrome.storage.sync.get('sites', function(data) {
         const sites = data.sites || [];

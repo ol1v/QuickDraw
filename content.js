@@ -3,48 +3,60 @@ console.log('Content script loaded.');
 document.addEventListener('keydown', function(event) {
   console.log('Keydown event detected:', event.key);
 
-  chrome.storage.sync.get(['hotkey', 'sites'], function(result) {
-    const hotkeyCombination = result.hotkey || ['Control', '1']; // Default to CTRL+1 if no hotkey is set
-    const sites = result.sites || [];
-    const pressedKeys = [event.key];
+  chrome.storage.sync.get(['hotkeyBindings', 'sites'], function(result) {
+    const hotkeyBindings = result.hotkeyBindings || [];
+    const sitesData = result.sites || [];
+    console.log('Hotkey configurations:', hotkeyBindings);
+    console.log('Sites data:', sitesData);
 
-    console.log('Stored hotkey combination:', hotkeyCombination);
-    console.log('Sites:', sites);
+    hotkeyBindings.forEach(binding => {
+      const hotkeyCombination = binding.hotkey || [];
+      const sites = binding.sites || [];
+      const pressedKeys = [event.key];
 
-    if (event.ctrlKey || event.metaKey) {
-      pressedKeys.push('Control');
-    }
-    if (event.shiftKey) {
-      pressedKeys.push('Shift');
-    }
-    if (event.altKey) {
-      pressedKeys.push('Alt');
-    }
+      console.log('Stored hotkey combination:', hotkeyCombination);
+      console.log('Sites:', sites);
 
-    console.log('Pressed keys:', pressedKeys);
+      if (event.ctrlKey || event.metaKey) {
+        pressedKeys.push('Control');
+      }
+      if (event.shiftKey) {
+        pressedKeys.push('Shift');
+      }
+      if (event.altKey) {
+        pressedKeys.push('Alt');
+      }
 
-    // Check if the pressed keys match the stored hotkey combination
-    const isMatch = hotkeyCombination.every(key => pressedKeys.includes(key));
-    console.log('Is hotkey combination match:', isMatch);
+      console.log('Pressed keys:', pressedKeys);
 
-    if (isMatch) {
-      console.log('Hotkey combination matched. Reading from clipboard...');
-      navigator.clipboard.readText().then(function(text) {
-        const selectedText = text.trim();
-        console.log('Clipboard content:', selectedText);
+      // Check if the pressed keys match the stored hotkey combination exactly
+      const isMatch = hotkeyCombination.length === pressedKeys.length && hotkeyCombination.every(key => pressedKeys.includes(key));
+      console.log('Is hotkey combination match:', isMatch);
 
-        if (selectedText) {
-          sites.forEach(site => {
-            const newTabUrl = site.url.replace('<ip-to-lookup>', encodeURIComponent(selectedText));
-            console.log('New tab URL:', newTabUrl);
-            chrome.runtime.sendMessage({ action: "createNewTab", text: newTabUrl });
-          });
-        } else {
-          console.log('Clipboard is empty.');
-        }
-      }).catch(function(err) {
-        console.error('Failed to read from clipboard:', err);
-      });
-    }
+      if (isMatch) {
+        console.log('Hotkey combination matched. Reading from clipboard...');
+        navigator.clipboard.readText().then(function(text) {
+          const selectedText = text.trim();
+          console.log('Clipboard content:', selectedText);
+
+          if (selectedText) {
+            sites.forEach(siteName => {
+              const site = sitesData.find(s => s.name === siteName);
+              if (site) {
+                const newTabUrl = site.url.replace('<ip-to-lookup>', encodeURIComponent(selectedText));
+                console.log('New tab URL:', newTabUrl);
+                chrome.runtime.sendMessage({ action: "createNewTab", text: newTabUrl });
+              } else {
+                console.log(`Site configuration for ${siteName} not found.`);
+              }
+            });
+          } else {
+            console.log('Clipboard is empty.');
+          }
+        }).catch(function(err) {
+          console.error('Failed to read from clipboard:', err);
+        });
+      }
+    });
   });
 });
