@@ -43,7 +43,17 @@ document.addEventListener('keydown', function(event) {
             sites.forEach(siteName => {
               const site = sitesData.find(s => s.name === siteName);
               if (site) {
-                const newTabUrl = site.url.replace('<ip-to-lookup>', encodeURIComponent(selectedText));
+                let newTabUrl;
+                if (selectedText.match(/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/)) {
+                  newTabUrl = site.urls.ip.replace('<ioc-type>', encodeURIComponent(selectedText));
+                } else if (selectedText.match(/^[a-f0-9]{32}|[a-f0-9]{40}|[a-f0-9]{64}$/)) {
+                  newTabUrl = site.urls.hash.replace('<ioc-type>', encodeURIComponent(selectedText));
+                } else if (selectedText.match(/^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+                  newTabUrl = site.urls.domain.replace('<ioc-type>', encodeURIComponent(selectedText));
+                } else {
+                  console.log('Unsupported IoC format.');
+                  return;
+                }
                 console.log('New tab URL:', newTabUrl);
                 chrome.runtime.sendMessage({ action: "createNewTab", text: newTabUrl });
               } else {

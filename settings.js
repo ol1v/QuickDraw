@@ -1,121 +1,176 @@
 document.addEventListener('DOMContentLoaded', function() {
     const siteNameInput = document.getElementById('siteName');
-    const siteUrlInput = document.getElementById('siteUrl');
+    const siteIpUrlInput = document.getElementById('siteIpUrl');
+    const siteDomainUrlInput = document.getElementById('siteDomainUrl');
+    const siteHashUrlInput = document.getElementById('siteHashUrl');
     const addSiteButton = document.getElementById('addSiteButton');
     const sitesList = document.getElementById('sitesList');
-    const hotkeyConfigs = document.getElementById('hotkeyConfigs');
-    const addHotkeyConfigButton = document.getElementById('addHotkeyConfigButton');
   
-    let sites = [];
-    let hotkeyBindings = [];
+    const hotkeyInput = document.getElementById('hotkeyInput');
+    const saveButton = document.getElementById('saveButton');
+    const siteCheckboxes = document.getElementById('siteCheckboxes');
+    const hotkeysList = document.getElementById('hotkeysList');
+    let hotkeyCombination = [];
+    let selectedSites = [];
   
-    function loadSites() {
-      chrome.storage.sync.get('sites', function(data) {
-        sites = data.sites || [];
-        renderSites();
+    // Load stored sites and hotkeys from storage
+    chrome.storage.sync.get(['sites', 'hotkeyBindings'], function(result) {
+      const sites = result.sites || [];
+      const hotkeyBindings = result.hotkeyBindings || [];
+      loadSites(sites);
+      loadHotkeyBindings(hotkeyBindings);
+    });
+  
+    // Load sites into the list and checkboxes
+    function loadSites(sites) {
+      sitesList.innerHTML = '';
+      siteCheckboxes.innerHTML = '';
+      sites.forEach((site, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${site.name}`;
+        sitesList.appendChild(li);
+  
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `site-${index}`;
+        checkbox.value = site.name;
+        siteCheckboxes.appendChild(checkbox);
+        const label = document.createElement('label');
+        label.htmlFor = `site-${index}`;
+        label.textContent = site.name;
+        siteCheckboxes.appendChild(label);
+        siteCheckboxes.appendChild(document.createElement('br'));
       });
     }
   
-    function renderSites() {
-      sitesList.innerHTML = '';
-      sites.forEach((site, index) => {
+    function loadHotkeyBindings(hotkeyBindings) {
+      hotkeysList.innerHTML = '';
+      hotkeyBindings.forEach((binding, index) => {
+        const { hotkey, sites } = binding;
         const li = document.createElement('li');
-        li.textContent = `${site.name}: ${site.url}`;
-        sitesList.appendChild(li);
+        li.className = 'hotkey-item';
+        li.innerHTML = `
+          ${hotkey.join(' + ')}: ${sites.join(', ')}
+          <button class="editButton" data-index="${index}">Edit</button>
+          <button class="removeButton" data-index="${index}">Remove</button>
+        `;
+        hotkeysList.appendChild(li);
+      });
+      attachHotkeyButtonsListeners();
+    }
+  
+    function attachHotkeyButtonsListeners() {
+      document.querySelectorAll('.editButton').forEach(button => {
+        button.addEventListener('click', function() {
+          const index = this.getAttribute('data-index');
+          editHotkeyConfiguration(index);
+        });
+      });
+  
+      document.querySelectorAll('.removeButton').forEach(button => {
+        button.addEventListener('click', function() {
+          const index = this.getAttribute('data-index');
+          removeHotkeyConfiguration(index);
+        });
       });
     }
   
     function addSite() {
       const name = siteNameInput.value.trim();
-      const url = siteUrlInput.value.trim();
+      const ipUrl = siteIpUrlInput.value.trim();
+      const domainUrl = siteDomainUrlInput.value.trim();
+      const hashUrl = siteHashUrlInput.value.trim();
       
-      if (name && url) {
-        sites.push({ name, url });
-        chrome.storage.sync.set({ sites }, function() {
-          renderSites();
-          siteNameInput.value = '';
-          siteUrlInput.value = '';
+      if (name && (ipUrl || domainUrl || hashUrl)) {
+        chrome.storage.sync.get('sites', function(data) {
+          const sites = data.sites || [];
+          sites.push({
+            name,
+            urls: {
+              ip: ipUrl,
+              domain: domainUrl,
+              hash: hashUrl
+            }
+          });
+          chrome.storage.sync.set({ sites }, function() {
+            loadSites(sites);
+            siteNameInput.value = '';
+            siteIpUrlInput.value = '';
+            siteDomainUrlInput.value = '';
+            siteHashUrlInput.value = '';
+          });
         });
       }
     }
   
-    function loadHotkeyBindings() {
+    hotkeyInput.addEventListener('keydown', function(event) {
+      event.preventDefault(); // Prevent the default action to avoid unintended behavior
+      const key = event.key;
+      if (!hotkeyCombination.includes(key)) {
+        hotkeyCombination.push(key);
+        hotkeyInput.value = hotkeyCombination.join(' + ');
+        console.log('Hotkey combination updated:', hotkeyCombination);
+      }
+    });
+  
+    hotkeyInput.addEventListener('focus', function() {
+      hotkeyCombination = [];
+      hotkeyInput.value = '';
+      console.log('Hotkey input field focused. Hotkey combination reset.');
+    });
+  
+    saveButton.addEventListener('click', function() {
+      selectedSites = [];
+      const checkboxes = document.querySelectorAll('#siteCheckboxes input[type="checkbox"]:checked');
+      checkboxes.forEach(checkbox => selectedSites.push(checkbox.value));
+  
       chrome.storage.sync.get('hotkeyBindings', function(data) {
-        hotkeyBindings = data.hotkeyBindings || [];
-        console.log('Loaded hotkey bindings:', hotkeyBindings); // Added logging
-        renderHotkeyBindings();
+        const hotkeyBindings = data.hotkeyBindings || [];
+        hotkeyBindings.push({
+          hotkey: hotkeyCombination,
+          sites: selectedSites
+        });
+  
+        chrome.storage.sync.set({ hotkeyBindings }, function() {
+          alert('Hotkey and site bindings saved.');
+          console.log('Hotkey and site bindings saved to storage:', hotkeyBindings);
+          loadHotkeyBindings(hotkeyBindings);
+        });
+      });
+    });
+  
+    function editHotkeyConfiguration(index) {
+      chrome.storage.sync.get('hotkeyBindings', function(data) {
+        const hotkeyBindings = data.hotkeyBindings || [];
+        const binding = hotkeyBindings[index];
+        hotkeyCombination = binding.hotkey;
+        selectedSites = binding.sites;
+  
+        hotkeyInput.value = hotkeyCombination.join(' + ');
+        const checkboxes = document.querySelectorAll('#siteCheckboxes input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = selectedSites.includes(checkbox.value);
+        });
+  
+        // Remove the old configuration before saving the new one
+        hotkeyBindings.splice(index, 1);
+        chrome.storage.sync.set({ hotkeyBindings }, function() {
+          console.log('Ready to edit hotkey configuration:', hotkeyCombination, selectedSites);
+        });
       });
     }
   
-    function renderHotkeyBindings() {
-      hotkeyConfigs.innerHTML = '';
-      hotkeyBindings.forEach((binding, index) => {
-        const div = document.createElement('div');
-        div.className = 'hotkey-config';
-        
-        const hotkeyLabel = document.createElement('label');
-        hotkeyLabel.textContent = `Hotkey Combination ${index + 1}:`;
-        div.appendChild(hotkeyLabel);
-        
-        const hotkeyInput = document.createElement('input');
-        hotkeyInput.type = 'text';
-        hotkeyInput.value = binding.hotkey.join(' + ');
-        div.appendChild(hotkeyInput);
-        
-        const siteCheckboxes = document.createElement('div');
-        sites.forEach(site => {
-          const checkboxLabel = document.createElement('label');
-          const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox';
-          checkbox.value = site.name;
-          checkbox.checked = binding.sites.includes(site.name);
-          
-          checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-              binding.sites.push(site.name);
-            } else {
-              binding.sites = binding.sites.filter(s => s !== site.name);
-            }
-            chrome.storage.sync.set({ hotkeyBindings }, function() {
-              console.log('Hotkey bindings updated:', hotkeyBindings); // Added logging
-            });
-          });
-  
-          checkboxLabel.appendChild(checkbox);
-          checkboxLabel.appendChild(document.createTextNode(site.name));
-          siteCheckboxes.appendChild(checkboxLabel);
+    function removeHotkeyConfiguration(index) {
+      chrome.storage.sync.get('hotkeyBindings', function(data) {
+        const hotkeyBindings = data.hotkeyBindings || [];
+        hotkeyBindings.splice(index, 1);
+        chrome.storage.sync.set({ hotkeyBindings }, function() {
+          console.log('Hotkey configuration removed:', index);
+          loadHotkeyBindings(hotkeyBindings);
         });
-        div.appendChild(siteCheckboxes);
-  
-        hotkeyInput.addEventListener('keydown', function(event) {
-          event.preventDefault(); // Prevent the default action to avoid unintended behavior
-          const key = event.key;
-          if (!binding.hotkey.includes(key)) {
-            binding.hotkey.push(key);
-            hotkeyInput.value = binding.hotkey.join(' + ');
-            chrome.storage.sync.set({ hotkeyBindings }, function() {
-              console.log('Hotkey bindings saved:', hotkeyBindings); // Added logging
-            });
-          }
-        });
-  
-        hotkeyInput.addEventListener('focus', function() {
-          binding.hotkey = [];
-          hotkeyInput.value = '';
-        });
-  
-        hotkeyConfigs.appendChild(div);
       });
-    }
-  
-    function addHotkeyConfig() {
-      hotkeyBindings.push({ hotkey: [], sites: [] });
-      renderHotkeyBindings();
     }
   
     addSiteButton.addEventListener('click', addSite);
-    addHotkeyConfigButton.addEventListener('click', addHotkeyConfig);
-  
-    loadSites();
-    loadHotkeyBindings();
   });
+  
