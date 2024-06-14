@@ -2,32 +2,7 @@
 <html>
 <head>
   <title>Quickdraw Settings</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 10px;
-    }
-    h1, h2, h3 {
-      font-size: 18px;
-    }
-    label, input, button {
-      display: block;
-      margin-bottom: 10px;
-    }
-    input[type="text"], input[type="url"] {
-      width: calc(100% - 22px);
-      padding: 5px;
-    }
-    button {
-      padding: 5px;
-      cursor: pointer;
-    }
-    .hotkey-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  </style>
+  <link rel="stylesheet" href="settings.css">
 </head>
 <body>
   <h1>Quickdraw Settings</h1>
@@ -43,7 +18,7 @@
   <label>File Hash:</label>
   <input type="url" id="siteHashUrl" placeholder="Example: https://www.virustotal.com/gui/file/<ioc-type>">
   
-  <button id="addSiteButton">Add Site</button>
+  <button id="addSiteButton" class="button-30">Add Site</button>
 
   <h2>Configured Sites</h2>
   <ul id="sitesList"></ul>
@@ -55,7 +30,7 @@
   <h3>Bind Sites to Hotkey</h3>
   <div id="siteCheckboxes"></div>
   
-  <button id="saveButton">Save Hotkey Configuration</button>
+  <button id="saveButton" class="button-30">Save Hotkey Configuration</button>
   
   <h2>Configured Hotkeys</h2>
   <ul id="hotkeysList"></ul>
