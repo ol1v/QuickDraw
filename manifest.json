@@ -1,25 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "Quickdraw",
+  "name": "QuickDraw",
   "version": "1.0",
-  "description": "Extracts selected words and opens them in a new tab.",
-  "permissions": [
-    "clipboardRead",
-    "clipboardWrite",
-    "tabs",
-    "storage"
-  ],
+  "description": "QuickDraw is a Chrome extension that enables users to instantly select and redirect Indicators of Compromise (IOCs) like IPs, file hashes, and email addresses to their favorite OSINT tools directly from the browser.",
+  "permissions": ["storage", "tabs", "activeTab", "clipboardRead", "clipboardWrite"],
   "background": {
     "service_worker": "background.js"
   },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "options_page": "settings.html",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "run_at": "document_idle"
+      "js": ["content.js"]
     }
-  ],
-  "action": {
-    "default_popup": "popup.html"
-  }
+  ]
 }
