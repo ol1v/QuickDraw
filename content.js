@@ -1,29 +1,43 @@
+console.log('Content script loaded.');
+
 document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey && event.key === '2') {
-      const selection = window.getSelection();
-      const selectedText = selection.toString().trim();
-  
-      if (selectedText) {
-        navigator.clipboard.writeText(selectedText).then(function() {
-          console.log('Text copied to clipboard:', selectedText);
-        }).catch(function(err) {
-          console.error('Failed to copy text to clipboard:', err);
-        });
-      } else {
-        console.log('No text selected.');
-      }
+  console.log('Keydown event detected:', event.key);
+
+  chrome.storage.sync.get(['hotkey', 'sites'], function(result) {
+    const hotkeyCombination = result.hotkey || ['Control', '1']; // Default to CTRL+1 if no hotkey is set
+    const sites = result.sites || [];
+    const pressedKeys = [event.key];
+
+    console.log('Stored hotkey combination:', hotkeyCombination);
+    console.log('Sites:', sites);
+
+    if (event.ctrlKey || event.metaKey) {
+      pressedKeys.push('Control');
     }
-  
-    if (event.key === '1') {
+    if (event.shiftKey) {
+      pressedKeys.push('Shift');
+    }
+    if (event.altKey) {
+      pressedKeys.push('Alt');
+    }
+
+    console.log('Pressed keys:', pressedKeys);
+
+    // Check if the pressed keys match the stored hotkey combination
+    const isMatch = hotkeyCombination.every(key => pressedKeys.includes(key));
+    console.log('Is hotkey combination match:', isMatch);
+
+    if (isMatch) {
+      console.log('Hotkey combination matched. Reading from clipboard...');
       navigator.clipboard.readText().then(function(text) {
         const selectedText = text.trim();
+        console.log('Clipboard content:', selectedText);
+
         if (selectedText) {
-          chrome.storage.sync.get('sites', function(data) {
-            const sites = data.sites || [];
-            sites.forEach(site => {
-              const newTabUrl = site.url.replace('<ip-to-lookup>', encodeURIComponent(selectedText));
-              chrome.runtime.sendMessage({ action: "createNewTab", text: newTabUrl });
-            });
+          sites.forEach(site => {
+            const newTabUrl = site.url.replace('<ip-to-lookup>', encodeURIComponent(selectedText));
+            console.log('New tab URL:', newTabUrl);
+            chrome.runtime.sendMessage({ action: "createNewTab", text: newTabUrl });
           });
         } else {
           console.log('Clipboard is empty.');
@@ -33,4 +47,4 @@ document.addEventListener('keydown', function(event) {
       });
     }
   });
-  
+});
