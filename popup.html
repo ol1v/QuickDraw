@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Quickdraw</title>
+  <title>QuickDraw</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -10,33 +10,19 @@
     h1 {
       font-size: 18px;
     }
-    label, input, button {
-      display: block;
-      margin-bottom: 10px;
+    ul {
+      list-style-type: none;
+      padding: 0;
     }
-    input[type="text"] {
-      width: calc(100% - 22px);
-      padding: 5px;
-    }
-    button {
-      padding: 5px;
-      cursor: pointer;
+    li {
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>Quickdraw</h1>
+  <h1>QuickDraw</h1>
   <p>Select a word on the page to extract it.</p>
   
-  <h2>Add New Site</h2>
-  <label for="siteName">Site Name:</label>
-  <input type="text" id="siteName" placeholder="Example: VirusTotal">
-  
-  <label for="siteUrl">Site URL:</label>
-  <input type="text" id="siteUrl" placeholder="Example: https://www.virustotal.com/gui/ip-address/<ip-to-lookup>">
-  
-  <button id="addSiteButton">Add Site</button>
-
   <h2>Configured Sites</h2>
   <ul id="sitesList"></ul>
 

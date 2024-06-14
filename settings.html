@@ -2,12 +2,55 @@
 <html>
 <head>
   <title>QuickDraw Settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    label, input, button {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input[type="text"] {
+      width: calc(100% - 22px);
+      padding: 5px;
+    }
+    button {
+      padding: 5px;
+      cursor: pointer;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
   <h1>QuickDraw Settings</h1>
-  <label for="hotkeyInput">Hotkey Combination:</label>
-  <input type="text" id="hotkeyInput" placeholder="Press your hotkey combination">
-  <button id="saveButton">Save</button>
+  
+  <h2>Configure Hotkey</h2>
+  <label for="hotkeyInput">Press the desired hotkey combination:</label>
+  <input type="text" id="hotkeyInput" readonly placeholder="Press the desired hotkey combination">
+  <button id="saveButton">Save Hotkey</button>
+
+  <h2>Add New Site</h2>
+  <label for="siteName">Site Name:</label>
+  <input type="text" id="siteName" placeholder="Example: VirusTotal">
+  
+  <label for="siteUrl">Site URL:</label>
+  <input type="text" id="siteUrl" placeholder="Example: https://www.virustotal.com/gui/ip-address/<ip-to-lookup>">
+  
+  <button id="addSiteButton">Add Site</button>
+
+  <h2>Configured Sites</h2>
+  <ul id="sitesList"></ul>
+
   <script src="settings.js"></script>
 </body>
 </html>
