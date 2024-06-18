@@ -1,0 +1,17 @@
+body {
+    font-family: 'Bebas Neue', cursive;
+    padding: 10pt;
+    background-image: linear-gradient(to left, #001525, #0d0e1d, #100814, #0c0309, #000000);
+    color: #fff;
+  }
+  h1 {
+    font-size: 18pt;
+    color: #e7b40d;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 5px;
+  }
