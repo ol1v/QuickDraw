@@ -31,8 +31,8 @@ use regex to identify what type of entity you're trying to lookup.
 
 EXAMPLE 1:
 
-```Copy "127.0.0.1" to clipboard -> Press hotkey -> Opens tabs for all sites configured to that specific hotkey
-which are able to look up the specific entity (an IP address in our case).```
+Copy "127.0.0.1" to clipboard -> Press hotkey -> Opens tabs for all sites configured to that specific hotkey
+which are able to look up the specific entity (an IP address in our case).
 
 ---
 
