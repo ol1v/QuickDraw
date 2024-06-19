@@ -23,6 +23,19 @@ Press Option in the plugin to access the settings.
 
 ---
 
+## Pre configured sites ##
+
+| Site                 | Supported entities                                   |
+| :------------------- | :----------------------------------------------------|
+| AbuseIPDB            | IP                                                   |
+| VirusTotal           | IP, Domain, Hash                                     |
+| Scamalytics          | IP                                                   |
+| AlienVault           | IP, Domain, Hash                                     |
+| GreyNoise            | IP, Domain, Hash                                     |
+| Shodan               | IP, Domain                                           |
+| Tor Project          | IP, domain                                           |
+| DomainTools Whois    | IP                                                   |
+
 ## Examples ## 
 
 As an example we'll use VirusTotal, which let's a user lookup IP's, domains or filehashes etc.
@@ -36,10 +49,11 @@ which are able to look up the specific entity (an IP address in our case).
 
 ---
 
-You can add custom T.I sources which may have query params in the URL and define what part of the URL should be
+You can add custom T.I sources such as MISP hosted on a private network which may have query params in the URL and define what part of the URL should be
 replaced with the clipboard data on hotkey press.
 
 ## Additional functionality ##
 
-I may add support for API:s and setting timestamps in URI query params down the line as well as adding custom
-regex patterns for other strings. As of now it supports IP addresses, File hashes and Domains.
+I want to add support for API:s and setting timestamps in URI query params down the line as well as adding the ability to add custom
+regex patterns for other types of IOCs.
+ As of now it supports IP addresses, File hashes and Domains.
