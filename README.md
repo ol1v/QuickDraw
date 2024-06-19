@@ -1,5 +1,8 @@
 # QuickDraw
-!["QD128.png](/icons/QD128.png "QD128.png")
+
+<p align="center">
+  <img src="/icons/QD128.png" width="128" height="128">
+</p>
 
 ## Description ## 
 This macro extension allows you to add hotkeys which lets you forward clipboard data
