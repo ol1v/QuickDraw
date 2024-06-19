@@ -1,9 +1,9 @@
 console.log('Content script loaded.');
 
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', (event) => {
   console.log('Keydown event detected:', event.key);
 
-  chrome.storage.sync.get(['hotkeyBindings', 'sites'], function(result) {
+  chrome.storage.sync.get(['hotkeyBindings', 'sites'], (result) => {
     const hotkeyBindings = result.hotkeyBindings || [];
     const sitesData = result.sites || [];
     console.log('Hotkey configurations:', hotkeyBindings);
@@ -35,7 +35,7 @@ document.addEventListener('keydown', function(event) {
 
       if (isMatch) {
         console.log('Hotkey combination matched. Reading from clipboard...');
-        navigator.clipboard.readText().then(function(text) {
+        navigator.clipboard.readText().then((text) => {
           const selectedText = text.trim();
           console.log('Clipboard content:', selectedText);
 
@@ -63,7 +63,7 @@ document.addEventListener('keydown', function(event) {
           } else {
             console.log('Clipboard is empty.');
           }
-        }).catch(function(err) {
+        }).catch((err) => {
           console.error('Failed to read from clipboard:', err);
         });
       }

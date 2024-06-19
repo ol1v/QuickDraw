@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener((details) => {
         .then(response => response.json())
         .then(predefinedSites => {
           // Get current sites from storage
-          chrome.storage.sync.get('sites', function(data) {
+          chrome.storage.sync.get('sites', (data) => {
             const sites = data.sites || [];
             
             // Add predefined sites to the current sites
@@ -21,7 +21,7 @@ chrome.runtime.onInstalled.addListener((details) => {
             });
   
             // Save updated sites to storage
-            chrome.storage.sync.set({ sites }, function() {
+            chrome.storage.sync.set({ sites }, () => {
               console.log('Predefined sites added.');
             });
           });
@@ -32,12 +32,12 @@ chrome.runtime.onInstalled.addListener((details) => {
     }
   });  
   
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((message, sendResponse) => {
     if (message.action === "createNewTab") {
         const newTabUrl = message.text;
         console.log('Opening new tab with URL:', newTabUrl);
 
-        chrome.tabs.create({ url: newTabUrl }, function(tab) {
+        chrome.tabs.create({ url: newTabUrl }, (tab) => {
             console.log('New tab created:', tab);
             sendResponse({ status: 'success', tabId: tab.id });
         });

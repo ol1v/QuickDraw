@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const siteNameInput = document.getElementById('siteName');
     const siteIpUrlInput = document.getElementById('siteIpUrl');
     const siteDomainUrlInput = document.getElementById('siteDomainUrl');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedSites = [];
   
     // Load stored sites and hotkeys from storage
-    chrome.storage.sync.get(['sites', 'hotkeyBindings'], function(result) {
+    chrome.storage.sync.get(['sites', 'hotkeyBindings'], (result) => {
       const sites = result.sites || [];
       const hotkeyBindings = result.hotkeyBindings || [];
       loadSites(sites);
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   
     // Load sites into the list and checkboxes
-    function loadSites(sites) {
+    const loadSites = (sites) => {
       sitesList.innerHTML = '';
       siteCheckboxes.innerHTML = '';
       sites.forEach((site, index) => {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   
-    function loadHotkeyBindings(hotkeyBindings) {
+    const loadHotkeyBindings = (hotkeyBindings) => {
       hotkeysList.innerHTML = '';
       hotkeyBindings.forEach((binding, index) => {
         const { hotkey, sites } = binding;
@@ -59,30 +59,30 @@ document.addEventListener('DOMContentLoaded', function() {
       attachHotkeyButtonsListeners();
     }
   
-    function attachHotkeyButtonsListeners() {
+    const attachHotkeyButtonsListeners = () => {
       document.querySelectorAll('.editButton').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', () => {
           const index = this.getAttribute('data-index');
           editHotkeyConfiguration(index);
         });
       });
   
       document.querySelectorAll('.removeButton').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', () => {
           const index = this.getAttribute('data-index');
           removeHotkeyConfiguration(index);
         });
       });
     }
   
-    function addSite() {
+    const addSite = () => {
       const name = siteNameInput.value.trim();
       const ipUrl = siteIpUrlInput.value.trim();
       const domainUrl = siteDomainUrlInput.value.trim();
       const hashUrl = siteHashUrlInput.value.trim();
       
       if (name && (ipUrl || domainUrl || hashUrl)) {
-        chrome.storage.sync.get('sites', function(data) {
+        chrome.storage.sync.get('sites', (data) => {
           const sites = data.sites || [];
           sites.push({
             name,
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
               hash: hashUrl
             }
           });
-          chrome.storage.sync.set({ sites }, function() {
+          chrome.storage.sync.set({ sites }, () => {
             loadSites(sites);
             siteNameInput.value = '';
             siteIpUrlInput.value = '';
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
   
-    hotkeyInput.addEventListener('keydown', function(event) {
+    hotkeyInput.addEventListener('keydown', (event) => {
       event.preventDefault(); // Prevent the default action to avoid unintended behavior
       const key = event.key;
       if (!hotkeyCombination.includes(key)) {
@@ -113,25 +113,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   
-    hotkeyInput.addEventListener('focus', function() {
+    hotkeyInput.addEventListener('focus', () => {
       hotkeyCombination = [];
       hotkeyInput.value = '';
       console.log('Hotkey input field focused. Hotkey combination reset.');
     });
   
-    saveButton.addEventListener('click', function() {
+    saveButton.addEventListener('click', () => {
       selectedSites = [];
       const checkboxes = document.querySelectorAll('#siteCheckboxes input[type="checkbox"]:checked');
       checkboxes.forEach(checkbox => selectedSites.push(checkbox.value));
   
-      chrome.storage.sync.get('hotkeyBindings', function(data) {
+      chrome.storage.sync.get('hotkeyBindings', (data) => {
         const hotkeyBindings = data.hotkeyBindings || [];
         hotkeyBindings.push({
           hotkey: hotkeyCombination,
           sites: selectedSites
         });
   
-        chrome.storage.sync.set({ hotkeyBindings }, function() {
+        chrome.storage.sync.set({ hotkeyBindings }, () => {
           alert('Hotkey and site bindings saved.');
           console.log('Hotkey and site bindings saved to storage:', hotkeyBindings);
           loadHotkeyBindings(hotkeyBindings);
@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   
-    function editHotkeyConfiguration(index) {
-      chrome.storage.sync.get('hotkeyBindings', function(data) {
+    const editHotkeyConfiguration = (index) => {
+      chrome.storage.sync.get('hotkeyBindings', (data) => {
         const hotkeyBindings = data.hotkeyBindings || [];
         const binding = hotkeyBindings[index];
         hotkeyCombination = binding.hotkey;
@@ -154,17 +154,17 @@ document.addEventListener('DOMContentLoaded', function() {
   
         // Remove the old configuration before saving the new one
         hotkeyBindings.splice(index, 1);
-        chrome.storage.sync.set({ hotkeyBindings }, function() {
+        chrome.storage.sync.set({ hotkeyBindings }, () => {
           console.log('Ready to edit hotkey configuration:', hotkeyCombination, selectedSites);
         });
       });
     }
   
-    function removeHotkeyConfiguration(index) {
-      chrome.storage.sync.get('hotkeyBindings', function(data) {
+    const removeHotkeyConfiguration = (index) => {
+      chrome.storage.sync.get('hotkeyBindings', (data) => {
         const hotkeyBindings = data.hotkeyBindings || [];
         hotkeyBindings.splice(index, 1);
-        chrome.storage.sync.set({ hotkeyBindings }, function() {
+        chrome.storage.sync.set({ hotkeyBindings }, () => {
           console.log('Hotkey configuration removed:', index);
           loadHotkeyBindings(hotkeyBindings);
         });
