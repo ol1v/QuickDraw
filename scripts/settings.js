@@ -5,14 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const siteHashUrlInput = document.getElementById('siteHashUrl');
     const addSiteButton = document.getElementById('addSiteButton');
     const sitesList = document.getElementById('sitesList');
-  
     const hotkeyInput = document.getElementById('hotkeyInput');
     const saveButton = document.getElementById('saveButton');
     const siteCheckboxes = document.getElementById('siteCheckboxes');
     const hotkeysList = document.getElementById('hotkeysList');
+    const toggleAddNewSiteButton = document.getElementById('toggleAddNewSite');
+    const addSiteDiv = document.getElementById('addSiteDiv');
+    const toggleAddNewHotkeyButton = document.getElementById('toggleAddNewHotkeyButton');
+    const addHotKeyDiv = document.getElementById('addHotkeyDiv');
     let hotkeyCombination = [];
     let selectedSites = [];
-  
+    
     // Load stored sites and hotkeys from storage
     chrome.storage.sync.get(['sites', 'hotkeyBindings'], (result) => {
       const sites = result.sites || [];
@@ -20,6 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
       loadSites(sites);
       loadHotkeyBindings(hotkeyBindings);
     });
+
+    const toggleAddNewSite = () => {
+      if (addSiteDiv.style.display === "none") {
+      addSiteDiv.style.display = "block";
+    } else {
+      addSiteDiv.style.display = "none";
+      }
+    }
+
+    const toggleAddNewHotKey = () => {
+      if (addHotKeyDiv.style.display === "none") {
+        addHotKeyDiv.style.display = "block";
+    } else {
+      addHotKeyDiv.style.display = "none";
+      }
+    }
   
     // Load sites into the list and checkboxes
     const loadSites = (sites) => {
@@ -51,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         li.className = 'hotkey-item';
         li.innerHTML = `
           ${hotkey.join(' + ')}: ${sites.join(', ')}
-          <button class="editButton" data-index="${index}">Edit</button>
+          <button class="editButton" data-index="${index}" >Edit</button>
           <button class="removeButton" data-index="${index}">Remove</button>
         `;
         hotkeysList.appendChild(li);
@@ -60,9 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     const attachHotkeyButtonsListeners = () => {
-      document.querySelectorAll('.editButton').forEach(button => {
+      const container = document.querySelector('#hotkeysList'); // test
+      container.querySelectorAll('li.hotkey-item > .editButton').forEach(button => { 
         button.addEventListener('click', () => {
-          const index = this.getAttribute('data-index');
+          console.log('Pressed edit button');
+          toggleAddNewHotKey();
+          const index = button.getAttribute('data-index');
           editHotkeyConfiguration(index);
         });
       });
@@ -172,5 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     addSiteButton.addEventListener('click', addSite);
+    toggleAddNewSiteButton.addEventListener('click', toggleAddNewSite);
+    toggleAddNewHotkeyButton.addEventListener('click', toggleAddNewHotKey)
   });
   

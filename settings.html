@@ -8,34 +8,40 @@
 </head>
 <body>
   <h1>Quickdraw Settings</h1>
-  <h2>Add New Site</h2>
-  <label for="siteName">Site Name:</label>
-  <input type="text" id="siteName" placeholder="Example: VirusTotal">
+
+  <h2>Configured Hotkeys</h2>
+  <ul id="hotkeysList"></ul>
+  <button id="toggleAddNewHotkeyButton">Add New Hotkey</button>
+  <div id="addHotkeyDiv" style="display: none;">
+    <h2>Configure Hotkeys</h2>
+    <label for="hotkeyInput">Press the hotkey combination:</label>
+    <input type="text" id="hotkeyInput" placeholder="Press hotkey combination">
   
-  <label for="siteUrls">Site URLs (use < ioc-type > as a placeholder):</label>
-  <label>IP</label>
-  <input type="url" id="siteIpUrl" placeholder="Example: https://www.virustotal.com/gui/ip-address/<ioc-type>">
-  <label>Domain</label>
-  <input type="url" id="siteDomainUrl" placeholder="Example: https://www.virustotal.com/gui/domain/<ioc-type>">
-  <label>File Hash</label>
-  <input type="url" id="siteHashUrl" placeholder="Example: https://www.virustotal.com/gui/file/<ioc-type>">
-  
-  <button id="addSiteButton" class="button-30">Add Site</button>
+    <h3>Bind Sites to Hotkey</h3>
+    <div id="siteCheckboxes"></div>
+    
+    <button id="saveButton" class="button-30">Save Hotkey Configuration</button>
+  </div>
 
   <h2>Configured Sites</h2>
   <ul id="sitesList"></ul>
 
-  <h2>Configure Hotkeys</h2>
-  <label for="hotkeyInput">Press the hotkey combination:</label>
-  <input type="text" id="hotkeyInput" placeholder="Press hotkey combination">
-
-  <h3>Bind Sites to Hotkey</h3>
-  <div id="siteCheckboxes"></div>
-  
-  <button id="saveButton" class="button-30">Save Hotkey Configuration</button>
-  
-  <h2>Configured Hotkeys</h2>
-  <ul id="hotkeysList"></ul>
+  <button id="toggleAddNewSite">Add New Site</button>
+  <div id="addSiteDiv" style="display: none;">
+    <h2>Add New Site</h2>
+    <label for="siteName">Site Name:</label>
+    <input type="text" id="siteName" placeholder="Example: VirusTotal">
+    
+    <label for="siteUrls">Site URLs (use < ioc-type > as a placeholder):</label>
+    <label>IP</label>
+    <input type="url" id="siteIpUrl" placeholder="Example: https://www.virustotal.com/gui/ip-address/<ioc-type>">
+    <label>Domain</label>
+    <input type="url" id="siteDomainUrl" placeholder="Example: https://www.virustotal.com/gui/domain/<ioc-type>">
+    <label>File Hash</label>
+    <input type="url" id="siteHashUrl" placeholder="Example: https://www.virustotal.com/gui/file/<ioc-type>">
+    
+    <button id="addSiteButton" class="button-30">Add Site</button>
+  </div>
 
   <script src="scripts/settings.js"></script>
 </body>
