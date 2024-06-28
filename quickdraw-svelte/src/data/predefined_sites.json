@@ -1,0 +1,59 @@
+[
+    {
+      "name": "GreyNoise",
+      "urls": {
+        "ip": "https://viz.greynoise.io/ip/<ioc-type>",
+        "domain": "https://viz.greynoise.io/domain/<ioc-type>",
+        "hash": "https://viz.greynoise.io/file/<ioc-type>"
+      }
+    },
+    {
+      "name": "AbuseIPDB",
+      "urls": {
+        "ip": "https://abuseipdb.com/check/<ioc-type>"
+      }
+    },
+    {
+      "name": "AlienVault",
+      "urls": {
+        "ip": "https://otx.alienvault.com/indicator/ip/<ioc-type>",
+        "domain": "https://otx.alienvault.com/indicator/domain/<ioc-type>",
+        "hash": "https://otx.alienvault.com/indicator/filehash/<ioc-type>"
+      }
+    },
+    {
+      "name": "VirusTotal",
+      "urls": {
+        "ip": "https://www.virustotal.com/gui/ip-address/<ioc-type>",
+        "domain": "https://www.virustotal.com/gui/domain/<ioc-type>",
+        "hash": "https://www.virustotal.com/gui/file/<ioc-type>"
+      }
+    },
+    {
+      "name": "DomainTools Whois",
+      "urls": {
+        "ip": "https://whois.domaintools.com/<ioc-type>"
+      }
+    },
+    {
+      "name": "Scamalytics",
+      "urls":{
+        "ip": "https://scamalytics.com/ip/<ioc-type>"
+      }
+    },
+    {
+      "name": "Tor Project",
+      "urls":{
+        "ip": "https://metrics.torproject.org/rs.html#search/<ioc-type>",
+        "domain": "https://metrics.torproject.org/rs.html#search/<ioc-type>"
+      }
+    },
+    {
+      "name": "Shodan",
+      "urls": {
+        "ip": "https://www.shodan.io/host/<ioc-type>",
+        "domain": "https://www.shodan.io/search?query=<ioc-type>"
+      }
+    }
+  ]
+  
