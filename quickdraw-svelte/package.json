@@ -14,10 +14,16 @@
     "@sveltejs/vite-plugin-svelte": "^3.1.1",
     "@tsconfig/svelte": "^5.0.4",
     "@types/chrome": "^0.0.268",
+    "daisyui": "^4.12.10",
+    "postcss": "^8.4.39",
     "svelte": "^4.2.18",
     "svelte-check": "^3.8.1",
+    "tailwindcss": "^3.4.4",
     "tslib": "^2.6.3",
     "typescript": "^5.2.2",
     "vite": "^5.3.1"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.19"
   }
 }
