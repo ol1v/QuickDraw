@@ -16,9 +16,20 @@
 
 
 <div>
-  {#each sites as site}
-    <div>
-      <span>{JSON.stringify(site)}</span>
-    </div> 
+  {#if sites}
+  <ul>
+    {#each sites as site}
+    <li>
+      <span>{site.name}</span>
+      {#each site.urls as urls}
+      <span>{JSON.stringify(Object.keys(urls))}</span>
+      {/each}
+    </li> 
   {/each}
+  </ul>
+  {:else}
+  <div>
+    <span>No sites configured</span>
+  </div>
+  {/if}
 </div>
