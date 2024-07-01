@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import '../app.css';
 
   let sites: {name: string}[] = []
 
@@ -16,20 +17,31 @@
 
 
 <div>
-  {#if sites}
-  <ul>
-    {#each sites as site}
-    <li>
-      <span>{site.name}</span>
-      {#each site.urls as urls}
-      <span>{JSON.stringify(Object.keys(urls))}</span>
-      {/each}
-    </li> 
-  {/each}
-  </ul>
-  {:else}
-  <div>
-    <span>No sites configured</span>
+  <div class="overflow-x-auto">
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>IOCs</th>
+          <th>Edit/Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- row 1 -->
+         {#if sites}
+         {#each sites as site}
+        <tr>
+          <th>{site.name}</th>
+          <td><div class="badge badge-accent badge-outline">{Object.keys(site.urls)}</div></td>
+          <td>
+            <button class="btn btn-xs btn-outline btn-accent">Edit</button>
+            <button class="btn btn-xs btn-outline btn-error">Delete</button>
+          </td>
+        </tr>
+        {/each}
+        {/if}
+      </tbody>
+    </table>
   </div>
-  {/if}
 </div>
