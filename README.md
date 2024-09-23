@@ -1,7 +1,7 @@
 # QuickDraw
 
 <p align="center">
-  <img src="/icons/QD128.png" width="128" height="128">
+  <img src="src/assets/icons/QD128.png" width="128" height="128">
 </p>
 
 ## Description ## 
